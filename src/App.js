@@ -8,7 +8,7 @@ import './App.css';
 /**
  * Create a varaible here that holds the contract address after you deploy!
 */
-const contractAddress = "0xAD363f4Ff856FF2e84CbaB7F35A285052EC63703";
+const contractAddress = "0x449870410cA573933a679441Fd610c1c64C8A2F6";
 
 /**
    * Create a variable here that references the abi content!
@@ -90,7 +90,8 @@ const [allWaves, setAllWaves] = useState([]);
         /*
         * Execute the actual wave from your smart contract
         */
-        const waveTxn = await wavePortalContract.wave("this is a message");
+        const waveTxn = await wavePortalContract.wave({ gasLimit: 300000 })
+     
         console.log("Mining...", waveTxn.hash);
 
         await waveTxn.wait();
@@ -105,25 +106,18 @@ const [allWaves, setAllWaves] = useState([]);
       console.log(error)
     }
   }
-
+// eslint-disable-next-line 
   const getAllWaves = async () => {
+    const { ethereum } = window;
+
     try {
-      const { ethereum } = window;
-      if (ethereum) {
+      if (window.ethereum) {
         const provider = new ethers.providers.Web3Provider(ethereum);
         const signer = provider.getSigner();
         const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
 
-        /*
-         * Call the getAllWaves method from your Smart Contract
-         */
         const waves = await wavePortalContract.getAllWaves();
-        
 
-        /*
-         * We only need address, timestamp, and message in our UI so let's
-         * pick those out
-         */
         let wavesCleaned = [];
         waves.forEach(wave => {
           wavesCleaned.push({
@@ -133,10 +127,20 @@ const [allWaves, setAllWaves] = useState([]);
           });
         });
 
-        /*
-         * Store our data in React State
-         */
         setAllWaves(wavesCleaned);
+
+        /**
+         * Listen in for emitter events!
+         */
+        wavePortalContract.on("NewWave", (from, timestamp, message) => {
+          console.log("NewWave", from, timestamp, message);
+
+          setAllWaves(prevState => [...prevState, {
+            address: from,
+            timestamp: new Date(timestamp * 1000),
+            message: message
+          }]);
+        });
       } else {
         console.log("Ethereum object doesn't exist!")
       }
@@ -145,16 +149,16 @@ const [allWaves, setAllWaves] = useState([]);
     }
   }
 
-
   useEffect(() => {
     checkIfWalletIsConnected();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   
   return (
     <div className="mainContainer">
       <div className="dataContainer">
         <div className="header">
-          👋 Hey there!
+          <span role="img" aria-labelledby="its a wave">👋</span> Hey there!
         </div>
 
         <div className="bio">
