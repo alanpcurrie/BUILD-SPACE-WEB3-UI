@@ -4,6 +4,13 @@ import abi from './utils/WavePortal.json';
 import './App.css';
 
 
+const divStyle = {
+  position: 'relative',
+  width: '100%',
+  height: '0',
+  paddingBottom: '54%'
+};
+
 
 /**
  * Create a varaible here that holds the contract address after you deploy!
@@ -162,8 +169,7 @@ const [allWaves, setAllWaves] = useState([]);
         </div>
 
         <div className="bio">
-          I am farza and I worked on self-driving cars so that's pretty cool right? Connect your Ethereum wallet and wave at me!
-        </div>
+        <div style={divStyle}><iframe src="https://giphy.com/embed/icUEIrjnUuFCWDxFpU" width="100%" height="100%" style={{position: "absolute", left: "50px"}} frameBorder="0" class="giphy-embed" allowFullScreen></iframe></div><p><a href="https://giphy.com/gifs/foxhomeent-napoleon-dynamite-20th-century-fox-icUEIrjnUuFCWDxFpU">via GIPHY</a></p>        </div>
 
         <button className="waveButton" onClick={wave}>
           Wave at Me
