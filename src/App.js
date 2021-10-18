@@ -169,7 +169,7 @@ const [allWaves, setAllWaves] = useState([]);
         </div>
 
         <div className="bio">
-        <div style={divStyle}><iframe src="https://giphy.com/embed/icUEIrjnUuFCWDxFpU" width="100%" height="100%" style={{position: "absolute", left: "50px"}} frameBorder="0" class="giphy-embed" allowFullScreen></iframe></div><p><a href="https://giphy.com/gifs/foxhomeent-napoleon-dynamite-20th-century-fox-icUEIrjnUuFCWDxFpU">via GIPHY</a></p>        </div>
+        <div style={divStyle}><iframe title="waving" src="https://giphy.com/embed/icUEIrjnUuFCWDxFpU" width="100%" height="100%" style={{position: "absolute", left: "50px"}} frameBorder="0" class="giphy-embed" allowFullScreen></iframe></div><p><a href="https://giphy.com/gifs/foxhomeent-napoleon-dynamite-20th-century-fox-icUEIrjnUuFCWDxFpU">via GIPHY</a></p>        </div>
 
         <button className="waveButton" onClick={wave}>
           Wave at Me
