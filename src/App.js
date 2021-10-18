@@ -1,6 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
+import abi from './utils/WavePortal.json';
 import './App.css';
+
+/**
+ * Create a varaible here that holds the contract address after you deploy!
+*/
+const contractAddress = "0xE32c6101FF84421EDF7A9F5C3D26249779E08607";
+
+/**
+   * Create a variable here that references the abi content!
+ */
+ const contractABI = abi.abi;
 
 const App = () => {
   const [currentAccount, setCurrentAccount] = useState("");
@@ -58,9 +69,25 @@ const App = () => {
       if (ethereum) {
         const provider = new ethers.providers.Web3Provider(ethereum);
         const signer = provider.getSigner();
+
+        /*
+        * You're using contractABI here
+        */
         const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
 
         let count = await wavePortalContract.getTotalWaves();
+        console.log("Retrieved total wave count...", count.toNumber());
+
+        /*
+        * Execute the actual wave from your smart contract
+        */
+        const waveTxn = await wavePortalContract.wave();
+        console.log("Mining...", waveTxn.hash);
+
+        await waveTxn.wait();
+        console.log("Mined -- ", waveTxn.hash);
+
+        count = await wavePortalContract.getTotalWaves();
         console.log("Retrieved total wave count...", count.toNumber());
       } else {
         console.log("Ethereum object doesn't exist!");
@@ -68,8 +95,7 @@ const App = () => {
     } catch (error) {
       console.log(error)
     }
-}
-
+  }
 
 
   useEffect(() => {
